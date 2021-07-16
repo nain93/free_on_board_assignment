@@ -90,12 +90,13 @@ const Profile = styled.div`
 `;
 
 const Service = styled(Link)`
-  padding: 10px;
+  padding: 8px;
   width: 80px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   margin-left: 10px;
   color: rgba(0, 0, 0, 0.5);
+  text-align: center;
 `;
 
 function Nav({ searchModal, setSearchModal }) {
@@ -182,21 +183,28 @@ function Nav({ searchModal, setSearchModal }) {
         <SideList>
           <IconBox>
             <button>
-              <AiOutlineSearch size={25} />
+              <AiOutlineSearch size={20} />
             </button>
             <button>
-              <VscBell size={25} />
+              <VscBell size={20} />
             </button>
-            <button onClick={handleBurgerModalOpen}>
-              {respon ? <GiHamburgerMenu size={20} /> : <Profile />}
-            </button>
+
+            {respon ? (
+              <button onClick={handleBurgerModalOpen}>
+                <GiHamburgerMenu size={15} />
+              </button>
+            ) : (
+              <button>
+                <Profile />
+              </button>
+            )}
           </IconBox>
 
           {!respon && (
             <>
               <RiSubtractLine
                 style={{ transform: "rotate(90deg)", color: "rgba(0,0,0,0.1)" }}
-                size={20}
+                size={15}
               />
               <Service to="/service">기업 서비스</Service>
             </>
