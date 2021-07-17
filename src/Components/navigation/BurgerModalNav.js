@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import wantedImg from "../../img/wantedImgLogo.PNG";
@@ -14,6 +14,9 @@ const Container = styled.div`
   bottom: 0;
   background-color: white;
   padding: 30px 20px;
+  @media (min-width: 767px) {
+    display: none;
+  }
 `;
 
 const LogoBox = styled.div`
@@ -55,23 +58,6 @@ function BurgerModalNav({ setOpenBurgerModal }) {
     setOpenBurgerModal(false);
     return;
   };
-
-  const handleResize = () => {
-    if (window.innerWidth > 767) {
-      setOpenBurgerModal(false);
-      return;
-    }
-    return;
-  };
-
-  useEffect(() => {
-    handleResize();
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <Container>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import wanted from "../../img/wantedLogo.PNG";
@@ -48,6 +48,16 @@ const NavList = styled.ul`
   }
   align-items: center;
   font-weight: 700;
+  > li:first-child {
+    @media (min-width: 768px) {
+      display: none;
+    }
+  }
+  > li:nth-child(n + 4) {
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
 `;
 
 const ListItem = styled.li`
@@ -76,6 +86,11 @@ const IconBox = styled.div`
   svg {
     margin: 0 10px;
   }
+  > svg {
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
 `;
 
 const Profile = styled.div`
@@ -97,11 +112,25 @@ const Service = styled(Link)`
   margin-left: 10px;
   color: rgba(0, 0, 0, 0.5);
   text-align: center;
+  @media (max-width: 767px) {
+    display: none;
+  }
+`;
+
+const ProfileBtn = styled.button`
+  @media (max-width: 767px) {
+    display: none;
+  }
+`;
+
+const BurgerBtn = styled.button`
+  @media (min-width: 768px) {
+    display: none;
+  }
 `;
 
 function Nav({ searchModal, setSearchModal }) {
   const { pathname } = useLocation();
-  const [respon, setRespon] = useState(false);
   const [openBurgerModal, setOpenBurgerModal] = useState(false);
 
   const handleBurgerModalOpen = () => {
@@ -109,51 +138,25 @@ function Nav({ searchModal, setSearchModal }) {
     return;
   };
 
-  const handleResize = () => {
-    if (window.innerWidth < 768) {
-      setRespon(true);
-      return;
-    } else {
-      setRespon(false);
-      return;
-    }
-  };
-
-  useEffect(() => {
-    handleResize();
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [respon]);
-
   const handleSearchOver = () => {
     setSearchModal(true);
     return;
   };
 
-  if (openBurgerModal) {
-    return (
-      <BurgerModalNav
-        openBurgerModal={openBurgerModal}
-        setOpenBurgerModal={setOpenBurgerModal}
-      />
-    );
-  }
-
   return (
     <Container>
+      {openBurgerModal && (
+        <BurgerModalNav setOpenBurgerModal={setOpenBurgerModal} />
+      )}
+
       <NavBox>
         <Logo>
           <img src={wanted} alt="wanted" />
         </Logo>
         <NavList>
-          {respon && (
-            <ListItem current={pathname === "/"}>
-              <Link to="/">홈</Link>
-            </ListItem>
-          )}
+          <ListItem current={pathname === "/"}>
+            <Link to="/">홈</Link>
+          </ListItem>
           <ListItem
             onMouseOver={handleSearchOver}
             current={pathname === "/search"}
@@ -163,22 +166,18 @@ function Nav({ searchModal, setSearchModal }) {
           <ListItem current={pathname === "/career"}>
             <Link to="/career">커리어 성장</Link>
           </ListItem>
-          {!respon && (
-            <>
-              <ListItem current={pathname === "/salary"}>
-                <Link to="/salary">직군별 연봉</Link>
-              </ListItem>
-              <ListItem current={pathname === "/resume"}>
-                <Link to="/resume">이력서</Link>
-              </ListItem>
-              <ListItem current={pathname === "/matchup"}>
-                <Link to="/matchup">매치업</Link>
-              </ListItem>
-              <ListItem current={pathname === "/freelancer"}>
-                <Link to="/freelancer">프리랜서</Link>
-              </ListItem>
-            </>
-          )}
+          <ListItem current={pathname === "/salary"}>
+            <Link to="/salary">직군별 연봉</Link>
+          </ListItem>
+          <ListItem current={pathname === "/resume"}>
+            <Link to="/resume">이력서</Link>
+          </ListItem>
+          <ListItem current={pathname === "/matchup"}>
+            <Link to="/matchup">매치업</Link>
+          </ListItem>
+          <ListItem current={pathname === "/freelancer"}>
+            <Link to="/freelancer">프리랜서</Link>
+          </ListItem>
         </NavList>
         <SideList>
           <IconBox>
@@ -189,26 +188,19 @@ function Nav({ searchModal, setSearchModal }) {
               <VscBell size={20} />
             </button>
 
-            {respon ? (
-              <button onClick={handleBurgerModalOpen}>
-                <GiHamburgerMenu size={15} />
-              </button>
-            ) : (
-              <button>
-                <Profile />
-              </button>
-            )}
+            <BurgerBtn onClick={handleBurgerModalOpen}>
+              <GiHamburgerMenu size={15} />
+            </BurgerBtn>
+            <ProfileBtn>
+              <Profile />
+            </ProfileBtn>
           </IconBox>
 
-          {!respon && (
-            <>
-              <RiSubtractLine
-                style={{ transform: "rotate(90deg)", color: "rgba(0,0,0,0.1)" }}
-                size={15}
-              />
-              <Service to="/service">기업 서비스</Service>
-            </>
-          )}
+          <RiSubtractLine
+            style={{ transform: "rotate(90deg)", color: "rgba(0,0,0,0.1)" }}
+            size={15}
+          />
+          <Service to="/service">기업 서비스</Service>
         </SideList>
       </NavBox>
       {searchModal && <SearchModalNav />}
